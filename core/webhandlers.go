@@ -56,3 +56,19 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Key deleted successfully"))
 }
 
+func GetAllElementsHandler(w http.ResponseWriter, r *http.Request) {
+	dhtElements, redisElements, err := GetAllElements()
+	if err != nil {
+	    http.Error(w, err.Error(), http.StatusInternalServerError)
+	    return
+	}
+
+
+    result := map[string]interface{}{
+        "dht":   dhtElements,
+        "redis": redisElements,
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(result)
+}

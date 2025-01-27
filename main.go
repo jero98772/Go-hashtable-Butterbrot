@@ -22,6 +22,7 @@ func main() {
 	r.HandleFunc("/api/put", core.PutHandler).Methods("POST")
 	r.HandleFunc("/api/get/{key}", core.GetHandler).Methods("GET")
 	r.HandleFunc("/api/delete/{key}", core.DeleteHandler).Methods("DELETE")
+	r.HandleFunc("/api/elements", core.GetAllElementsHandler).Methods("GET")
 
 	// Serve static files
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

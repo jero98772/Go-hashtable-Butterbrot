@@ -60,3 +60,19 @@ func CombinedDelete(key string) error {
 
 	return nil
 }
+
+func GetAllElements() (map[string]string, map[string]string, error) {
+    // Retrieve DHT elements
+    dhtElements, err := dht.GetAllDHTElements() // Replace with your DHT retrieval logic
+    if err != nil {
+        return nil, nil, fmt.Errorf("failed to retrieve DHT elements: %w", err)
+    }
+
+    // Retrieve Redis elements
+    redisElements, err := RedisElementsAll() // Replace with your Redis retrieval logic
+    if err != nil {
+        return nil, nil, fmt.Errorf("failed to retrieve Redis elements: %w", err)
+    }
+
+    return dhtElements, redisElements, nil
+}

@@ -121,3 +121,18 @@ func (d *DHT) PrintDHT() {
 		fmt.Println("------------------")
 	}
 }
+
+func (d *DHT) GetAllDHTElements() (map[string]string, error) {
+	d.mu.RLock()
+	defer d.mu.RUnlock()
+
+	allElements := make(map[string]string)
+	for _, node := range d.Nodes {
+		node.mu.RLock()
+		for key, value := range node.Data {
+			allElements[key] = value
+		}
+		node.mu.RUnlock()
+	}
+	return allElements, nil
+}

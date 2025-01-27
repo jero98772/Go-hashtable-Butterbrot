@@ -42,3 +42,21 @@ func RedisGet(key string) (string, error) {
 func RedisDelete(key string) error {
 	return rdb.Del(ctx, key).Err()
 }
+
+func RedisElementsAll() (map[string]string, error) {
+    // Fetch all keys using the Redis client
+    keys, err := rdb.Keys(ctx, "*").Result()
+    if err != nil {
+        return nil, err
+    }
+
+    result := make(map[string]string)
+    for _, key := range keys {
+        value, err := rdb.Get(ctx, key).Result()
+        if err != nil {
+            continue // Skip keys that can't be fetched
+        }
+        result[key] = value
+    }
+    return result, nil
+}
