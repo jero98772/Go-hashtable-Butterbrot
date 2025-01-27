@@ -1,4 +1,4 @@
-module go-redis-dht
+module Go-hashtable-Butterbrot
 
 go 1.23.4
 
