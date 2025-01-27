@@ -122,16 +122,19 @@ func (d *DHT) PrintDHT() {
 	}
 }
 
-func (d *DHT) GetAllDHTElements() (map[string]string, error) {
+func (d *DHT) GetAllDHTElements() (map[string]map[string]string, error) {
 	d.mu.RLock()
 	defer d.mu.RUnlock()
 
-	allElements := make(map[string]string)
+	allElements := make(map[string]map[string]string)
 	for _, node := range d.Nodes {
 		node.mu.RLock()
+		// Copy node data to avoid concurrency issues
+		nodeData := make(map[string]string)
 		for key, value := range node.Data {
-			allElements[key] = value
+			nodeData[key] = value
 		}
+		allElements[node.ID] = nodeData
 		node.mu.RUnlock()
 	}
 	return allElements, nil

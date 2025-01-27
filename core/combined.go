@@ -63,9 +63,17 @@ func CombinedDelete(key string) error {
 
 func GetAllElements() (map[string]string, map[string]string, error) {
     // Retrieve DHT elements
-    dhtElements, err := dht.GetAllDHTElements() // Replace with your DHT retrieval logic
+    rawDHTElements, err := dht.GetAllDHTElements() // Returns map[string]map[string]string
     if err != nil {
         return nil, nil, fmt.Errorf("failed to retrieve DHT elements: %w", err)
+    }
+
+    // Flatten the nested map
+    dhtElements := make(map[string]string)
+    for nodeID, nodeData := range rawDHTElements {
+        for key, value := range nodeData {
+            dhtElements[fmt.Sprintf("%s:%s", nodeID, key)] = value // Prefix with node ID
+        }
     }
 
     // Retrieve Redis elements
